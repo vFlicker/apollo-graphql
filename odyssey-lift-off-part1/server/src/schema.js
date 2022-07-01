@@ -1,6 +1,6 @@
-import { gpl } from 'apollo-server'
+import { gql } from 'apollo-server'
 
-const typeDefs = gpl`
+export const typeDefs = gql`
   type Query {
     "Get tracks array for home page grid"
     takesForHome: [Track!]!
@@ -30,5 +30,3 @@ const typeDefs = gpl`
     photo: String
   }
 `;
-
-export default typeDefs;
