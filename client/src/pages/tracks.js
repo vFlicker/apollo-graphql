@@ -14,7 +14,7 @@ const Tracks = () => {
   return (
     <Layout grid>
       <QueryResult error={error} loading={loading} data={data}>
-        {data?.takesForHome?.map((track) => (
+        {data?.tracksForHome?.map((track) => (
           <TrackCard key={track.id} track={track} />
         ))}
       </QueryResult>

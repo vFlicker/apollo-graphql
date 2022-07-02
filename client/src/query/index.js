@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const TRACKS = gql`
   query getTracks {
-    takesForHome {
+    tracksForHome {
       id
       title
       thumbnail
