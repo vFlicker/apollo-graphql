@@ -46,7 +46,3 @@ export const typeDefs = gql`
     photo: String
   }
 `;
-
-[Mission!] => [Mission] || null
-[Mission]! => [null] || []
-[Mission!]! => [Mission]
