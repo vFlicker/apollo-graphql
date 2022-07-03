@@ -5,6 +5,8 @@ export const typeDefs = gql`
     "Query to get tracks array for the homepage grid"
     tracksForHome: [Track!]!
     track(id: ID!): Track
+    "Fetch a specific module, provided a module's ID"
+    module(id: ID!): Module!
   }
 
   type Mutation {
@@ -50,10 +52,14 @@ export const typeDefs = gql`
     id: ID!
     "The Module's title"
     title: String!
+    "The module's text-based description, can be in markdown format. In case of a video, it will be the enriched transcript"
+    content: String
     "The module's length in seconds"
     length: Int @deprecated(reason: "Use durationInSeconds")
     "The module's video duration, in seconds"
     durationInSeconds: Int
+    "The module's video url, for video-based modules"
+    videoUrl: String
   }
 
   "Author of a complete Track or a Module"
