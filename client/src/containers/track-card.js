@@ -1,7 +1,9 @@
 import React from 'react';
+import { useMutation } from '@apollo/client';
 import styled from '@emotion/styled';
 import { Link } from '@reach/router'
 import { colors, mq } from '../styles';
+import { INCREMENT_TRACK_VIEWS } from '../query';
 import { humanReadableTimeFromSeconds } from '../utils/helpers';
 
 /**
@@ -11,8 +13,13 @@ import { humanReadableTimeFromSeconds } from '../utils/helpers';
 const TrackCard = ({ track }) => {
   const { title, thumbnail, author, length, modulesCount, id } = track;
 
+  const [incrementTrackViews] = useMutation(INCREMENT_TRACK_VIEWS, {
+    variables: { 'incrementTrackViewsId': id },
+  });
+
+
   return (
-    <CardContainer to={`/track/${id}`}>
+    <CardContainer to={`/track/${id}`} onClick={incrementTrackViews}>
       <CardContent>
         <CardImageContainer>
           <CardImage src={thumbnail} alt={title} />

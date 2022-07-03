@@ -1,2 +1,3 @@
-export * from './get-track.js';
-export * from './tracks.js';
+export * from './get-track';
+export * from './increment-track-views';
+export * from './tracks';
