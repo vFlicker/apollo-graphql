@@ -4,17 +4,18 @@ const resolvers = {
   Query: {
     launches: async (_, { pageSize = 20, after }, { dataSources }) => {
       const allLaunches = await dataSources.launchAPI.getAllLaunches();
-      allLaunches.reverse(); // we want these in reverse chronological order
+      // we want these in reverse chronological order
+      allLaunches.reverse();
 
       const launches = paginateResults({
         after,
         pageSize,
-        results: allLaunches
+        results: allLaunches,
       });
 
       const lastCursor = launches.length // we need to get the next cursor
-        ? launches[launches.length - 1].cursor
-        : null;
+      ? launches[launches.length - 1].cursor
+      : null;
 
       // if the cursor at the end of the paginated results is the same as the
       // last item in _all_ results, then there are no more results after this
@@ -26,13 +27,15 @@ const resolvers = {
       return {
         launches,
         cursor: lastCursor,
+        // if the cursor of the end of the paginated results is the same as the
+        // last item in _all_ results, then there are no more results after this
         hasMore,
       };
     },
     launch: (_, { id }, { dataSources }) => {
       return dataSources.launchAPI.getLaunchById({ launchId: id });
     },
-    me:(_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser(),
+    me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser(),
   },
   Mutation: {
     login: async (_, { email }, { dataSources }) => {
@@ -41,7 +44,6 @@ const resolvers = {
         user.token = Buffer.from(email).toString('base64');
         return user;
       }
-      throw new Error('Login failed');
     },
     bookTrips: async (_, { launchIds }, { dataSources }) => {
       const results = await dataSources.userAPI.bookTrips({ launchIds });
@@ -49,10 +51,10 @@ const resolvers = {
       return {
         success: results && results.length === launchIds.length,
         message: results.length === launchIds.length
-        ? 'trips booked successfully'
-        : `the following launches couldn't be booked: ${launchIds.filter(
-            id => !results.includes(id),
-          )}`,
+            ? 'trips booked successfully'
+            : `the following launches couldn't be booked: ${launchIds.filter(
+                id => !results.includes(id),
+              )}`,
         launches,
       };
     },
@@ -65,7 +67,7 @@ const resolvers = {
           message: 'failed to cancel trip',
           launches: null,
         };
-  
+
       const launch = await dataSources.launchAPI.getLaunchById({ launchId });
       return {
         success: true,
@@ -74,7 +76,13 @@ const resolvers = {
       };
     },
   },
+  Launch: {
+    isBooked: async (launch, _, { dataSources }) => {
+      return dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id });
+    },
+  },
   Mission: {
+    // make sure the default size is 'large' in case user doesn't specify
     missionPatch: (mission, { size } = { size: 'LARGE' }) => {
       return size === 'SMALL'
         ? mission.missionPatchSmall
@@ -83,8 +91,10 @@ const resolvers = {
   },
   User: {
     trips: async (_, __, { dataSources }) => {
+      // get ids of launches by user
       const launchIds = await dataSources.userAPI.getLaunchIdsByUser();
       if (!launchIds.length) return [];
+      // look up those launches by their ids
       return dataSources.launchAPI.getLaunchesByIds({ launchIds }) || [];
     },
   },
