@@ -13,9 +13,9 @@ export default class LaunchAPI extends RESTDataSource {
       : [];
   }
 
-  getLaunchById = async ({ launchId  }) => {
-    const response = await this.get('launches', { flight_number: launchId });
-    return this.#launchReducer(response[0]);
+  getLaunchById = async ({ launchId }) => {
+    const response = await this.get(`launches/${launchId}`);
+    return this.#launchReducer(response);
   }
 
   getLaunchesByIds = ({ launchIds }) => {

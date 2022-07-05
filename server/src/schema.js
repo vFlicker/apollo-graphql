@@ -2,7 +2,16 @@ import { gql } from 'apollo-server';
 
 const typeDefs = gql`
   type Query {
-    launches: [Launch]!
+    launches(
+    """
+    The number of results to show. Must be >= 1. Default = 20
+    """
+    pageSize: Int
+    """
+    If you add a cursor here, it will only return results _after_ this cursor
+    """
+    after: String
+    ): LaunchConnection!
     launch(id: ID!): Launch
     me: User
   }
@@ -25,6 +34,27 @@ const typeDefs = gql`
     mission: Mission
     rocket: Rocket
     isBooked: Boolean!
+  }
+
+  """
+  Simple wrapper around our list of launches that contains a cursor to the
+  last item in the list. Pass this cursor to the launches query to fetch results
+  after these.
+  """
+  type LaunchConnection {
+    """
+    indicates the current position in the data set
+    """
+    cursor: String!
+    """
+    indicates whether the data set contains any more items beyond those included
+    in launches
+    """
+    hasMore: Boolean!
+    """
+    the actual data requested by a query
+    """
+    launches: [Launch]!
   }
 
   type Rocket {
