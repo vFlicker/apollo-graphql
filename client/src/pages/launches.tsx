@@ -1,14 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { gql, useQuery } from '@apollo/client'
-import * as GetLaunchListTypes from './__generated__/GetLaunchList';
+import { gql, useQuery } from '@apollo/client';
 
-import {
-  LaunchTile,
-  Header,
-  Button,
-  Loading
-} from '../components';
+import { LaunchTile, Header, Button, Loading } from '../components';
+import * as GetLaunchListTypes from './__generated__/GetLaunchList';
 
 export const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {
@@ -52,16 +47,15 @@ const Launches: React.FC<LaunchesProps> = () => {
     data,
     loading,
     error,
-    fetchMore,
+    fetchMore
   } = useQuery<
     GetLaunchListTypes.GetLaunchList,
     GetLaunchListTypes.GetLaunchListVariables
   >(GET_LAUNCHES);
-  const [isLoadingMore, setIsLoadingMore] = useState(false); 
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   if (loading) return <Loading />;
-  if (error) return <p>ERROR</p>;
-  if (!data) return <p>Not found</p>;
+  if (error || !data) return <p>ERROR</p>;
 
   return (
     <Fragment>
@@ -71,23 +65,23 @@ const Launches: React.FC<LaunchesProps> = () => {
         data.launches.launches.map((launch: any) => (
           <LaunchTile key={launch.id} launch={launch} />
         ))}
-        {data.launches && data.launches.hasMore && (isLoadingMore ? (
-            <Loading />
-          ) : (
-            <Button
+      {data.launches && data.launches.hasMore && (
+        isLoadingMore
+          ? <Loading />
+          : <Button
               onClick={async () => {
                 setIsLoadingMore(true);
                 await fetchMore({
                   variables: {
-                    after: data.launches.cursor
-                  }
+                    after: data.launches.cursor,
+                  },
                 });
                 setIsLoadingMore(false);
               }}
             >
               Load More
             </Button>
-          ))}
+      )}
     </Fragment>
   );
 }

@@ -3,7 +3,7 @@ import {
   gql,
   useMutation,
   useReactiveVar,
-  Reference
+  Reference,
 } from '@apollo/client';
 
 import { GET_LAUNCH_DETAILS } from '../pages/launch';

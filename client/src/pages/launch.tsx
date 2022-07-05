@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { gql, useQuery } from '@apollo/client';
 
-import { Header, LaunchDetail, Loading } from '../components';
+import { Loading, Header, LaunchDetail } from '../components';
 import { ActionButton } from '../containers';
 import { LAUNCH_TILE_DATA } from './launches';
 import * as LaunchDetailsTypes from './__generated__/LaunchDetails';

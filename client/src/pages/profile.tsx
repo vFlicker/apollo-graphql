@@ -1,9 +1,9 @@
-import React, {Fragment} from 'react';
-import {gql, useQuery} from '@apollo/client';
+import React, { Fragment } from 'react';
+import { gql, useQuery } from '@apollo/client';
 
-import {Loading, Header, LaunchTile} from '../components';
-import {LAUNCH_TILE_DATA} from './launches';
-import {RouteComponentProps} from '@reach/router';
+import { Loading, Header, LaunchTile } from '../components';
+import { LAUNCH_TILE_DATA } from './launches';
+import { RouteComponentProps } from '@reach/router';
 import * as GetMyTripsTypes from './__generated__/GetMyTrips';
 
 export const GET_MY_TRIPS = gql`
@@ -22,11 +22,14 @@ export const GET_MY_TRIPS = gql`
 interface ProfileProps extends RouteComponentProps {}
 
 const Profile: React.FC<ProfileProps> = () => {
-  const { data, loading, error } = useQuery<GetMyTripsTypes.GetMyTrips>(
+  const {
+    data,
+    loading,
+    error
+  } = useQuery<GetMyTripsTypes.GetMyTrips>(
     GET_MY_TRIPS,
-    { fetchPolicy: 'network-only' }
+    { fetchPolicy: "network-only" }
   );
-
   if (loading) return <Loading />;
   if (error) return <p>ERROR: {error.message}</p>;
   if (data === undefined) return <p>ERROR</p>;
@@ -43,6 +46,6 @@ const Profile: React.FC<ProfileProps> = () => {
       )}
     </Fragment>
   );
-};
+}
 
 export default Profile;
